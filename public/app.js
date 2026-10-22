@@ -1,8 +1,10 @@
 const config = window.GROEN_CO || {};
 const number = String(config.whatsappNumber || "").replace(/[+\s()-]/g, "");
 const validNumber = /^[1-9]\d{7,14}$/.test(number);
-const contactMessage = config.whatsappMessage || "Hallo Max en Leo! Ik wil graag meer informatie over de diensten van Groen & Co.";
-document.querySelectorAll("[data-whatsapp]").forEach(link => {
+const contactMessage =
+  config.whatsappMessage ||
+  "Hallo Max en Leo! Ik wil graag meer informatie over de diensten van Groen & Co.";
+document.querySelectorAll("[data-whatsapp]").forEach((link) => {
   if (validNumber) {
     link.href = "https://wa.me/" + number + "?text=" + encodeURIComponent(contactMessage);
     link.target = "_blank";
@@ -12,10 +14,10 @@ document.querySelectorAll("[data-whatsapp]").forEach(link => {
     link.removeAttribute("target");
   }
 });
-document.querySelectorAll("[data-contact-status]").forEach(element => {
+document.querySelectorAll("[data-contact-status]").forEach((element) => {
   element.hidden = validNumber;
 });
-document.querySelectorAll("[data-whatsapp-ready]").forEach(element => {
+document.querySelectorAll("[data-whatsapp-ready]").forEach((element) => {
   element.hidden = !validNumber;
 });
 const menuButton = document.querySelector("[data-menu-toggle]");
@@ -30,16 +32,26 @@ if (menuButton && menu) {
     menuButton.setAttribute("aria-expanded", String(expanded));
     menu.classList.toggle("is-open", expanded);
   });
-  menu.addEventListener("click", e => { if (e.target.closest("a")) close(); });
-  document.addEventListener("keydown", e => { if (e.key === "Escape") { close(); menuButton.focus(); } });
+  menu.addEventListener("click", (e) => {
+    if (e.target.closest("a")) close();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      close();
+      menuButton.focus();
+    }
+  });
 }
-document.querySelectorAll("[data-team-photo]").forEach(frame => {
+document.querySelectorAll("[data-team-photo]").forEach((frame) => {
   if (!config.photos?.together) return;
   const img = document.createElement("img");
   img.alt = "Max en Leo, de oprichters van Groen & Co.";
   img.loading = "lazy";
   img.decoding = "async";
-  img.addEventListener("load", () => { frame.replaceChildren(img); frame.classList.add("has-photo"); });
+  img.addEventListener("load", () => {
+    frame.replaceChildren(img);
+    frame.classList.add("has-photo");
+  });
   img.src = config.photos.together;
 });
 const work = document.querySelector("[data-work-gallery]");
@@ -48,7 +60,10 @@ if (work && Array.isArray(config.photos?.work)) {
     const img = document.createElement("img");
     img.alt = "Werkzaamheden van Groen & Co. in Arnhem en omgeving — foto " + (i + 1);
     img.loading = "lazy";
-    img.addEventListener("load", () => { work.hidden = false; work.append(img); });
+    img.addEventListener("load", () => {
+      work.hidden = false;
+      work.append(img);
+    });
     img.src = src;
   });
 }
@@ -61,6 +76,7 @@ if (config.siteUrl) {
       link.href = new URL(location.pathname, base).href;
       document.head.append(link);
     }
-  } catch { /* Een ongeldige configuratie beïnvloedt de pagina niet. */ }
+  } catch {
+    /* Een ongeldige configuratie beïnvloedt de pagina niet. */
+  }
 }
-
