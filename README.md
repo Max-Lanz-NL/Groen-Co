@@ -42,6 +42,8 @@ Voor eigen werkfoto's: voeg bestanden toe aan `public/images/work/` en vul `phot
 
 ## Publiceren
 
+De elektrische heggenschaar houdt een rechte baan; alleen de messen trillen. Handgereedschap heeft vier werkcycli met een trekbeweging, kanteling en opgetilde terugslag. Bladeren schuiven met de hark mee en onkruid wordt met zichtbare wortels gelicht. De heg heeft puntige, geaderde bladeren; het herfstblad bedekt de hele knop. De interactietests controleren ook dat handgereedschap echt van richting verandert en machines recht blijven bewegen.
+
 `npm run build` maakt `dist/`. `vercel.json` geeft buildopdracht en uitvoermap aan. De bestaande GitHub-koppeling kan de nieuwe commit automatisch publiceren. Controleer het deploymentresultaat in Vercel; een push bewijst niet dat de nieuwe website live staat.
 
 De site gebruikt paden vanaf het hoofddomein, geen GitHub Pages-submap. De standaard 404-pagina blijft beschikbaar. Sitemap en canonical-links worden vooraf gegenereerd en zijn niet afhankelijk van JavaScript.

@@ -14,7 +14,23 @@ function setup({ reduced = false, hover = true, service = "" } = {}) {
     timers = new Map(),
     events = {};
   const classes = new Set(["button"]);
+  let transform = { x: 0, angle: 0 };
+  const stack = [],
+    toolMotion = [];
   const ctx = {
+    save() {
+      stack.push({ ...transform });
+    },
+    restore() {
+      transform = stack.pop();
+    },
+    translate(x) {
+      transform.x += x;
+    },
+    rotate(angle) {
+      transform.angle += angle;
+    },
+    closePath() {},
     clearRect() {},
     fillRect() {},
     setTransform() {},
@@ -25,10 +41,12 @@ function setup({ reduced = false, hover = true, service = "" } = {}) {
     ellipse() {},
     fill() {},
     stroke() {
-      if (this.strokeStyle?.startsWith("rgba")) clippings++;
+      if (this.strokeStyle?.startsWith("rgba(170") || this.strokeStyle?.startsWith("rgba(194"))
+        clippings++;
     },
     drawImage() {
       mowerFrames++;
+      toolMotion.push({ ...transform });
     },
   };
   const link = {
@@ -83,6 +101,7 @@ function setup({ reduced = false, hover = true, service = "" } = {}) {
     link,
     frames,
     timers,
+    toolMotion,
     get toolSrc() {
       return toolSrc;
     },
@@ -175,7 +194,7 @@ test("touch en verminderde beweging laten de knop rustig", () => {
 
 for (const [service, effect, tool] of [
   ["grasmaaien", "grass", "mower-top"],
-  ["snoeien", "hedge", "shears-top"],
+  ["snoeien", "hedge", "electric-trimmer-top"],
   ["onkruid", "weeds", "weeder-top"],
   ["bladeren", "leaves", "rake-top"],
   ["tuinonderhoud", "care", "garden-tools-top"],
@@ -193,8 +212,21 @@ for (const [service, effect, tool] of [
     button.advance(700);
     assert.ok(button.mowerFrames > 0);
     assert.ok(button.clippings > 0);
-    button.advance(800);
+    button.advance(2200);
     assert.equal(button.link.dataset.grassState, "mown");
+    if (!["grass", "hedge"].includes(effect)) {
+      assert.ok(
+        button.toolMotion.some((pose, i, poses) => i && pose.x < poses[i - 1].x),
+        "gereedschap trekt echt terug",
+      );
+      assert.ok(button.toolMotion.some((pose) => pose.angle > 0.1));
+      assert.ok(button.toolMotion.some((pose) => pose.angle < -0.1));
+    } else {
+      assert.ok(
+        button.toolMotion.every((pose) => pose.angle === 0),
+        "machine maakt een rechte baan",
+      );
+    }
     button.fire("pointerleave");
     button.advance(1100);
     assert.equal(button.link.dataset.grassState, "growing");

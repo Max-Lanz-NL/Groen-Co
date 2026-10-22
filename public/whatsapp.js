@@ -31,7 +31,7 @@ window.GroenWhatsApp = {
       "/images/" +
       {
         grass: "mower-top",
-        hedge: "shears-top",
+        hedge: "electric-trimmer-top",
         weeds: "weeder-top",
         leaves: "rake-top",
         care: "garden-tools-top",
@@ -55,6 +55,72 @@ window.GroenWhatsApp = {
     const setState = (state) => {
       link.dataset.grassState = state;
     };
+    const duration = {
+      grass: 1400,
+      hedge: 1700,
+      weeds: 2600,
+      leaves: 2600,
+      care: 2600,
+      sweep: 2400,
+    }[kind];
+    const ease = (value) => value * value * (3 - 2 * value);
+    function toolPose(p) {
+      const base = p * (width + 90) - 45;
+      if (kind === "grass" || kind === "hedge")
+        return { x: base, y: height / 2, angle: 0, contact: true };
+      // Een werkende trekbeweging, gevolgd door een opgetilde teruggaande slag.
+      const phase = (p * 4) % 1;
+      const contact = phase < 0.68;
+      const stroke = contact ? ease(phase / 0.68) : ease((phase - 0.68) / 0.32);
+      const reach = kind === "weeds" ? 65 : 78;
+      return {
+        x: base + (contact ? reach * (0.45 - stroke) : reach * (-0.55 + stroke)),
+        y:
+          height / 2 + (contact ? Math.sin(stroke * Math.PI) * 4 : -9 * Math.sin(stroke * Math.PI)),
+        angle: contact ? -0.22 + stroke * 0.4 : 0.18 - stroke * 0.4,
+        contact,
+      };
+    }
+    function leaf(x, y, size, angle, color, maple = false) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      if (maple) {
+        ctx.moveTo(-size, 0);
+        ctx.lineTo(-size * 0.35, -size * 0.2);
+        ctx.lineTo(-size * 0.6, -size * 0.65);
+        ctx.lineTo(0, -size * 0.4);
+        ctx.lineTo(size * 0.2, -size * 0.85);
+        ctx.lineTo(size * 0.45, -size * 0.3);
+        ctx.lineTo(size, 0);
+        ctx.lineTo(size * 0.45, size * 0.3);
+        ctx.lineTo(size * 0.2, size * 0.85);
+        ctx.lineTo(0, size * 0.4);
+        ctx.lineTo(-size * 0.6, size * 0.65);
+        ctx.lineTo(-size * 0.35, size * 0.2);
+        ctx.closePath();
+      } else {
+        ctx.moveTo(-size, 0);
+        ctx.quadraticCurveTo(-size * 0.1, -size * 0.85, size, 0);
+        ctx.quadraticCurveTo(-size * 0.1, size * 0.85, -size, 0);
+      }
+      ctx.fill();
+      ctx.strokeStyle = "rgba(198, 208, 148, .28)";
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(-size * 0.8, 0);
+      ctx.lineTo(size * 0.8, 0);
+      for (const sign of [-1, 1]) {
+        ctx.moveTo(-size * 0.35, 0);
+        ctx.lineTo(0, sign * size * 0.32);
+        ctx.moveTo(size * 0.15, 0);
+        ctx.lineTo(size * 0.4, sign * size * 0.24);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
     const cancelGrowth = () => {
       clearTimeout(growTimer);
       growTimer = 0;
@@ -67,20 +133,27 @@ window.GroenWhatsApp = {
       const dt = Math.min((time - lastFrame) / 1000 || 0, 0.04);
       lastFrame = time;
       if (mowing) {
-        progress = Math.min((time - started) / 1400, 1);
+        progress = Math.min((time - started) / duration, 1);
+        const pose = toolPose(progress);
         const front = progress * (width + 80) - 20;
         blades.forEach((blade) => {
-          if (blade.x >= previousX && blade.x <= front) blade.level = 0;
+          if (kind === "grass" || kind === "hedge") {
+            if (blade.x >= previousX && blade.x <= front) blade.level = 0;
+          } else if (pose.contact && Math.abs(blade.x + blade.shift - (pose.x + 18)) < 27) {
+            blade.level = Math.max(0, blade.level - dt * 5);
+            blade.shift -= dt * (kind === "weeds" ? 14 : 75);
+          }
+          if (progress > 0.92) blade.level = Math.min(blade.level, (1 - progress) / 0.08);
         });
         previousX = front;
-        if (front > 0 && front < width && dt > 0) {
-          for (let i = 0; i < 3; i++)
+        if (pose.x > 0 && pose.x < width && dt > 0 && pose.contact) {
+          for (let i = 0; i < (kind === "grass" ? 3 : 2); i++)
             particles.push({
-              x: front - 10,
-              y: height / 2 + (i % 2 ? 14 : -14),
+              x: pose.x + 16,
+              y: pose.y + (i % 2 ? 14 : -14),
               vx:
                 kind === "leaves" || kind === "sweep"
-                  ? 75 + Math.random() * 80
+                  ? -70 - Math.random() * 50
                   : -35 - Math.random() * 70,
               vy: (i % 2 ? 1 : -1) * (20 + Math.random() * 65),
               life: 0.3 + Math.random() * 0.25,
@@ -94,9 +167,10 @@ window.GroenWhatsApp = {
       }
       if (growing) {
         const t = Math.min((time - started) / regrowDuration, 1);
-        const eased = t * t * (3 - 2 * t);
+        const eased = ease(t);
         blades.forEach((blade) => {
           blade.level = blade.from + (1 - blade.from) * eased;
+          blade.shift = blade.shiftFrom * (1 - eased);
         });
         if (t === 1) {
           growing = false;
@@ -125,75 +199,74 @@ window.GroenWhatsApp = {
       }
       if (kind === "care") {
         ctx.fillStyle = "#35382a";
-        ctx.fillRect(0, 0, width, height * 0.48);
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = "#454331";
+        ctx.lineWidth = 1.2;
+        for (let y = 9; y < height; y += 12) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.quadraticCurveTo(width * 0.5, y + 3, width, y);
+          ctx.stroke();
+        }
       }
       blades.forEach((blade) => {
         const type = kind === "care" ? blade.type : kind;
         if (type === "hedge") {
-          const size = 2 + blade.level * blade.length * 0.38;
-          ctx.fillStyle = blade.color;
-          ctx.beginPath();
-          ctx.ellipse(blade.x, blade.y, size, size * 0.65, blade.dx * 3, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.strokeStyle = "#26472a";
-          ctx.lineWidth = 0.6;
-          ctx.beginPath();
-          ctx.moveTo(blade.x - size * 0.5, blade.y);
-          ctx.lineTo(blade.x + size * 0.5, blade.y);
-          ctx.stroke();
+          const size = blade.base
+            ? 4 + blade.length * 0.32
+            : (3 + blade.length * 0.4) * blade.level;
+          const trimmedY = Math.max(height * 0.16, Math.min(height * 0.84, blade.y));
+          const y = blade.base ? trimmedY + (blade.y - trimmedY) * blade.level : blade.y;
+          if (size > 0.2) leaf(blade.x, y, size, blade.dx * 4, blade.color);
           return;
         }
         if (["weeds", "leaves", "sweep"].includes(type)) {
           if (blade.level < 0.01) return;
           ctx.globalAlpha = blade.level;
           if (type === "weeds") {
-            const size = blade.length * 0.55 * blade.level;
-            ctx.strokeStyle = "#64804c";
-            ctx.lineWidth = 1.2;
-            ctx.beginPath();
-            ctx.moveTo(blade.x, blade.y);
-            ctx.lineTo(blade.x, blade.y - size);
-            ctx.stroke();
-            ctx.fillStyle = blade.color;
-            for (let side of [-1, 1]) {
-              ctx.beginPath();
-              ctx.ellipse(
-                blade.x + side * size * 0.35,
-                blade.y - size * 0.6,
-                size * 0.5,
-                size * 0.22,
-                side * 0.7,
-                0,
-                Math.PI * 2,
+            const size = (5 + blade.length * 0.45) * blade.level;
+            const x = blade.x + blade.shift;
+            const y = blade.y - (1 - blade.level) * 9;
+            // Een herkenbare rozet met losse puntige bladeren en wortel bij lostrekken.
+            for (let arm = 0; arm < 6; arm++) {
+              const angle = (arm * Math.PI) / 3 + blade.dx;
+              leaf(
+                x + Math.cos(angle) * size * 0.45,
+                y + Math.sin(angle) * size * 0.45,
+                size * 0.65,
+                angle,
+                blade.color,
+                true,
               );
-              ctx.fill();
+            }
+            if (blade.flower) {
+              ctx.fillStyle = "#c1aa48";
               ctx.beginPath();
-              ctx.ellipse(
-                blade.x + side * size * 0.35,
-                blade.y,
-                size * 0.5,
-                size * 0.22,
-                -side * 0.7,
-                0,
-                Math.PI * 2,
-              );
+              ctx.ellipse(x, y, 1.8, 1.8, 0, 0, Math.PI * 2);
               ctx.fill();
+            }
+            if (blade.level < 0.85) {
+              ctx.strokeStyle = "#b19c6b";
+              ctx.lineWidth = 0.8;
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(x + 2, y + (1 - blade.level) * 14);
+              ctx.lineTo(x - 2, y + (1 - blade.level) * 18);
+              ctx.stroke();
             }
           } else if (type === "sweep" && blade.type !== "leaves") {
             ctx.fillStyle = "#96836a";
-            ctx.fillRect(blade.x, blade.y, 1.7, 1.2);
+            ctx.fillRect(blade.x + blade.shift, blade.y, 1.7, 1.2);
           } else {
-            const size = (3 + blade.length * 0.22) * blade.level;
-            ctx.fillStyle = blade.autumn;
-            ctx.beginPath();
-            ctx.ellipse(blade.x, blade.y, size, size * 0.5, blade.dx * 3, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = "#b2a275";
-            ctx.lineWidth = 0.6;
-            ctx.beginPath();
-            ctx.moveTo(blade.x, blade.y);
-            ctx.lineTo(blade.x + size * blade.dx, blade.y + size * 0.4);
-            ctx.stroke();
+            const size = (4 + blade.length * 0.3) * (0.6 + 0.4 * blade.level);
+            leaf(
+              blade.x + blade.shift,
+              blade.y,
+              size,
+              blade.dx * 4 + blade.shift * 0.03,
+              blade.autumn,
+              blade.maple,
+            );
           }
           ctx.globalAlpha = 1;
           return;
@@ -240,8 +313,28 @@ window.GroenWhatsApp = {
         }
       });
       if (mowing && mower.complete && mower.naturalWidth) {
-        const bob = kind === "grass" ? 0 : Math.sin(progress * Math.PI * 12) * 2.5;
-        ctx.drawImage(mower, progress * (width + 80) - 68, height / 2 - 22 + bob, 56, 44);
+        const pose = toolPose(progress);
+        ctx.save();
+        ctx.translate(pose.x, pose.y);
+        ctx.rotate(pose.angle);
+        if (!pose.contact) ctx.globalAlpha = 0.7;
+        const toolWidth = kind === "hedge" ? 80 : kind === "grass" ? 56 : 72;
+        ctx.drawImage(mower, -toolWidth / 2, -22, toolWidth, 44);
+        if (kind === "hedge") {
+          // De tanden bewegen snel heen en weer; de hele machine blijft strak op koers.
+          ctx.strokeStyle = "#c7d1c1";
+          ctx.lineWidth = 1;
+          const jitter = Math.sin(time * 0.12) * 1.4;
+          for (let tooth = 2; tooth < 34; tooth += 4) {
+            ctx.beginPath();
+            ctx.moveTo(tooth + jitter, -3);
+            ctx.lineTo(tooth + jitter + 1, -6);
+            ctx.moveTo(tooth + jitter, 3);
+            ctx.lineTo(tooth + jitter + 1, 6);
+            ctx.stroke();
+          }
+        }
+        ctx.restore();
       }
       if (mowing || growing || particles.length) frame = requestAnimationFrame(paint);
     }
@@ -272,6 +365,7 @@ window.GroenWhatsApp = {
         mowing = false;
         blades.forEach((blade) => {
           blade.from = blade.level;
+          blade.shiftFrom = blade.shift;
         });
         started = performance.now();
         lastFrame = started;
@@ -298,18 +392,26 @@ window.GroenWhatsApp = {
         seed = (seed * 16807) % 2147483647;
         return seed / 2147483647;
       };
-      const colors = ["#365f34", "#426c3b", "#2e562e", "#4b713d", "#244d2d"];
-      const density = kind === "grass" ? 22 : kind === "hedge" ? 42 : 170;
+      const colors = ["#3e6b37", "#507a3e", "#305d30", "#597e43", "#294f2c"];
+      const density = { grass: 22, hedge: 25, weeds: 290, leaves: 28, care: 170, sweep: 75 }[kind];
       blades = Array.from({ length: Math.ceil((width * height) / density) }, (_, i) => ({
         x: random() * width,
-        y: random() * (height + 12),
+        y: random() * (height + (kind === "leaves" || kind === "hedge" ? 0 : 12)),
         dx: random() * 1.6 - 0.8,
         length: 6 + random() * 9,
         level: 1,
         from: 1,
+        shift: 0,
+        shiftFrom: 0,
+        base: i % 3 !== 0,
+        maple: i % 3 === 0,
+        flower: i % 4 === 0,
         color: colors[Math.floor(random() * colors.length)],
         autumn: ["#9c7946", "#b19556", "#807344", "#976141"][Math.floor(random() * 4)],
-        type: ["grass", "weeds", "leaves"][i % 3],
+        type:
+          kind === "care"
+            ? ["weeds", "leaves", "weeds"][i % 3]
+            : ["grass", "weeds", "leaves"][i % 3],
       }));
       setState("ready");
       paint();
