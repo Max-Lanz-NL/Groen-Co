@@ -7,7 +7,8 @@
     "dev": "node scripts/serve.mjs",
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
-    "check:built": "node scripts/check-built.mjs"
+    "check:built": "node scripts/check-built.mjs",
+    "test:grass": "node --test scripts/grass-button.test.mjs"
   },
   "engines": {
     "node": ">=20"

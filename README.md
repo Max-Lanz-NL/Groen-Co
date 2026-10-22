@@ -38,7 +38,7 @@ Voor eigen werkfoto's: voeg bestanden toe aan `public/images/work/` en vul `phot
 
 ## WhatsApp-grasmaaier
 
-`public/whatsapp.js` is het herbruikbare onderdeel voor alle knoppen met `data-whatsapp` en `class="button"`. De eigen SVG rijdt via CSS één keer in één seconde over de onderste strook van de knop bij hover of toetsenbordfocus. De tekst blijft erboven leesbaar. De illustratie ontvangt geen muis-events en is verborgen voor schermlezers. Het effect staat uit bij verminderde beweging en hover wordt niet gebruikt op touchapparaten.
+`public/whatsapp.js` tekent een grasachtergrond op compacte WhatsApp-knoppen. Bij hover of toetsenbordfocus rijdt de eigen SVG van een grasmaaier van bovenaf over het gras, met grassnippers en een zichtbaar gemaaid spoor. Twee seconden na verlaten/blur groeit het gras in 3,2 seconden terug. Teruggaan annuleert die timer. Canvas is decoratief, ontvangt geen muis-events en is verborgen voor schermlezers; de linktekst blijft gewone HTML. Het effect staat uit bij verminderde beweging en hover wordt niet gebruikt op touchapparaten. Er draait alleen een animatielus tijdens maaien, snippers of teruggroei. `npm run test:grass` controleert de beweging, snippers, tijdstappen, hernieuwde hover, toetsenbordfocus en verminderde beweging.
 
 ## Publiceren
 
