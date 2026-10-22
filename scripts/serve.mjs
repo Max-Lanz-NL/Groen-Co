@@ -1,7 +1,7 @@
 import http from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { resolve, extname, sep } from "node:path";
-const root = resolve("public");
+const root = resolve(process.argv.includes("--dist") ? "dist" : "public");
 const types = {
   ".html": "text/html; charset=utf-8",
   ".css": "text/css; charset=utf-8",

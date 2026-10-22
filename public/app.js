@@ -2,13 +2,14 @@ const config = window.GROEN_CO || {};
 const number = String(config.whatsappNumber || "").replace(/[+\s()-]/g, "");
 const validNumber = /^[1-9]\d{7,14}$/.test(number);
 const contactMessage =
-  config.whatsappMessage ||
-  "Hallo Max en Leo! Ik wil graag meer informatie over de diensten van Groen & Co.";
+  config.whatsappMessage || "Hoi Max en Leo, ik heb een vraag over tuinonderhoud.";
 document.querySelectorAll("[data-whatsapp]").forEach((link) => {
   if (validNumber) {
-    link.href = "https://wa.me/" + number + "?text=" + encodeURIComponent(contactMessage);
+    const message = link.dataset.message || contactMessage;
+    link.href = "https://wa.me/" + number + "?text=" + encodeURIComponent(message);
     link.target = "_blank";
     link.rel = "noopener noreferrer";
+    window.GroenWhatsApp?.enhance(link);
   } else {
     link.href = "/contact/#whatsapp";
     link.removeAttribute("target");
@@ -36,47 +37,43 @@ if (menuButton && menu) {
     if (e.target.closest("a")) close();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") {
+    if (e.key === "Escape" && menuButton.getAttribute("aria-expanded") === "true") {
       close();
       menuButton.focus();
     }
   });
 }
 document.querySelectorAll("[data-team-photo]").forEach((frame) => {
-  if (!config.photos?.together) return;
+  if (!config.photos?.showTeam || !config.photos?.together) return;
   const img = document.createElement("img");
   img.alt = "Max en Leo, de oprichters van Groen & Co.";
-  img.loading = "lazy";
+  // Eerst laden, daarna pas tonen; een los lazy-img kan anders blijven wachten.
+  img.loading = "eager";
   img.decoding = "async";
   img.addEventListener("load", () => {
     frame.replaceChildren(img);
     frame.classList.add("has-photo");
+    frame.hidden = false;
   });
   img.src = config.photos.together;
 });
 const work = document.querySelector("[data-work-gallery]");
 if (work && Array.isArray(config.photos?.work)) {
-  config.photos.work.forEach((src, i) => {
+  config.photos.work.forEach((photo, i) => {
+    const src = typeof photo === "string" ? photo : photo.src;
+    if (!src) return;
     const img = document.createElement("img");
-    img.alt = "Werkzaamheden van Groen & Co. in Arnhem en omgeving — foto " + (i + 1);
-    img.loading = "lazy";
+    img.alt = photo.alt || "Eigen werk van Groen & Co. — foto " + (i + 1);
+    img.loading = "eager";
+    img.decoding = "async";
     img.addEventListener("load", () => {
-      work.hidden = false;
+      work.closest("[data-work-section]").hidden = false;
       work.append(img);
     });
     img.src = src;
   });
 }
-if (config.siteUrl) {
-  try {
-    const base = new URL(config.siteUrl);
-    if (["https:", "http:"].includes(base.protocol)) {
-      const link = document.createElement("link");
-      link.rel = "canonical";
-      link.href = new URL(location.pathname, base).href;
-      document.head.append(link);
-    }
-  } catch {
-    /* Een ongeldige configuratie beïnvloedt de pagina niet. */
-  }
-}
+document.querySelectorAll("[data-price]").forEach((element) => {
+  const price = config.prices?.[element.dataset.price];
+  if (price?.label) element.textContent = [price.label, price.unit].filter(Boolean).join(" · ");
+});

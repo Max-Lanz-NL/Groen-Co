@@ -4,22 +4,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#123B2A" />
-    <title>Neem contact op met Max & Leo | Groen & Co.</title>
+    <title>WhatsApp met Max & Leo voor tuinhulp | Groen & Co.</title>
     <meta
       name="description"
-      content="Een vraag over tuinonderhoud in Arnhem? Neem persoonlijk contact op met Max en Leo van Groen & Co. via WhatsApp."
+      content="Een klusje in de tuin in Arnhem of omgeving? App Max en Leo met je vraag of een foto van je tuin. Alleen WhatsApp, niet bellen."
     />
-    <meta property="og:title" content="Neem contact op met Max & Leo | Groen & Co." />
+    <meta property="og:title" content="WhatsApp met Max & Leo voor tuinhulp | Groen & Co." />
     <meta
       property="og:description"
-      content="Een vraag over tuinonderhoud in Arnhem? Neem persoonlijk contact op met Max en Leo van Groen & Co. via WhatsApp."
+      content="Een klusje in de tuin in Arnhem of omgeving? App Max en Leo met je vraag of een foto van je tuin. Alleen WhatsApp, niet bellen."
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/config.js" defer></script>
+    <script src="/whatsapp.js" defer></script>
     <script src="/app.js" defer></script>
+    <link rel="canonical" href="https://groenenco125235.vercel.app/contact/" />
+    <meta property="og:url" content="https://groenenco125235.vercel.app/contact/" />
   </head>
   <body>
     <a href="#main" class="skip">Naar de inhoud</a>
@@ -60,55 +63,54 @@
     <main id="main">
       <section class="page-hero">
         <div class="wrap">
-          <div class="eyebrow">Gewoon even kennismaken</div>
-          <h1>Neem contact op<br />met Max & Leo</h1>
+          <div class="eyebrow">Contact</div>
+          <h1>Een klusje<br />in de tuin?</h1>
           <p>
-            Een vraag over tuinonderhoud of benieuwd naar de mogelijkheden? Stuur ons gerust een
-            WhatsApp-bericht. We kijken graag met je mee.
+            Stuur ons gerust een WhatsAppje met wat er moet gebeuren. Een foto van de tuin mag ook.
+            Dan kijken we wat we voor je kunnen doen.
           </p>
         </div>
       </section>
       <div class="wrap contact-layout">
         <div>
-          <div class="eyebrow">We helpen je graag</div>
-          <h2>Jouw tuin.<br />Ons volgende gesprek.</h2>
+          <h2>App met Max & Leo.</h2>
+          <p class="contact-intro">
+            Je spreekt rechtstreeks met een van ons. We komen samen naar de klussen en regelen
+            afspraken persoonlijk via WhatsApp.
+          </p>
           <dl class="details">
             <div>
-              <dt>Je contactpersonen</dt>
-              <dd>Max & Leo</dd>
-            </div>
-            <div>
-              <dt>WhatsApp · alleen appen, niet bellen</dt>
-              <dd><a href="/contact/#whatsapp" data-whatsapp>06 19110237</a></dd>
-            </div>
-            <div>
-              <dt>Ons werkgebied</dt>
+              <dt>Werkgebied</dt>
               <dd>Arnhem en omgeving</dd>
             </div>
             <div>
-              <dt>Zo maken we een afspraak</dt>
-              <dd>Persoonlijk besproken en bevestigd</dd>
+              <dt>Bereikbaar via</dt>
+              <dd>WhatsApp · alleen appen, niet bellen</dd>
             </div>
           </dl>
         </div>
         <section class="contact-panel" id="whatsapp" aria-labelledby="whatsapp-title">
-          <div class="eyebrow">Rechtstreeks contact</div>
-          <h2 id="whatsapp-title">Een berichtje is<br />een goed begin.</h2>
-          <p>
-            Vertel ons wat je wilt laten doen. Je kunt ook een foto van je tuin meesturen. Samen
-            bespreken we de klus en de planning.
-          </p>
-          <p>Je kunt ons alleen appen, niet bellen.</p>
-          <div data-whatsapp-ready hidden>
-            <a class="button" href="/contact/#whatsapp" data-whatsapp
-              >WhatsApp met Max & Leo<span aria-hidden="true">↗</span></a
+          <h2 id="whatsapp-title">Vertel ons over je klus.</h2>
+          <p>Dit is handig om mee te sturen:</p>
+          <ul class="contact-list">
+            <li>Wat je wilt laten doen.</li>
+            <li>Waar de tuin is en hoe groot die ongeveer is.</li>
+            <li>Eventueel een foto en wanneer het je uitkomt.</li>
+          </ul>
+          <div data-whatsapp-ready>
+            <a
+              class="button"
+              data-whatsapp
+              href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20heb%20een%20vraag%20over%20tuinonderhoud."
+              >Stuur ons een WhatsApp<span aria-hidden="true">↗</span></a
             >
           </div>
-          <p class="notice" data-contact-status>
-            Ons WhatsApp-nummer wordt binnenkort toegevoegd. Zodra het beschikbaar is, kun je ons
-            hier rechtstreeks een bericht sturen.
+          <p class="notice" data-contact-status hidden>
+            WhatsApp is op dit moment niet beschikbaar. Probeer het later opnieuw.
           </p>
-          <p>Je afspraak staat vast zodra we die persoonlijk met je hebben bevestigd.</p>
+          <p class="contact-hint">
+            Alleen appen, niet bellen. We bespreken en bevestigen de afspraak met je.
+          </p>
         </section>
       </div>
     </main>
@@ -138,15 +140,17 @@
           <div>
             <div class="footer-title">Persoonlijk contact</div>
             <div class="footer-links">
-              <a href="/contact/#whatsapp" data-whatsapp>WhatsApp met Max & Leo ↗</a
+              <a
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20heb%20een%20vraag%20over%20tuinonderhoud."
+                data-whatsapp
+                >WhatsApp met Max & Leo ↗</a
               ><span>Arnhem en omgeving</span><span>Alleen appen, niet bellen</span
               ><span>Afspraken in overleg</span>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 Groen & Co.</span
-          ><span>Samen aan de slag. Met aandacht voor jouw groen.</span>
+          <span>© 2026 Groen & Co.</span><span>Tuinklussen in Arnhem en omgeving.</span>
         </div>
       </div>
     </footer>

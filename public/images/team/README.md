@@ -1,5 +1,11 @@
-# Echte teamfoto's
+# Optionele teamfoto, standaard uitgeschakeld
 
-Plaats de gezamenlijke foto hier als `max-leo.jpg`. De homepage en over-ons-pagina tonen deze automatisch. Tot die tijd blijft de ontworpen placeholder staan.
+Er worden geen portretten getoond of opgevraagd. Er staan geen fotoplaceholders op de website.
 
-Gebruik alleen echte foto's met toestemming. Optionele afzonderlijke foto's kunnen `max.jpg` en `leo.jpg` heten; ze worden bewust nog niet getoond zodat de website compleet blijft met één gezamenlijke foto.
+Alleen als jullie later zelf een foto willen tonen:
+
+1. Plaats een echte gezamenlijke foto hier als `max-leo.jpg`.
+2. Stel `photos.together` in `public/config.js` in op `/images/team/max-leo.jpg`.
+3. Zet `photos.showTeam` expliciet op `true`.
+
+De foto verschijnt dan op de over-ons-pagina, nadat de afbeelding succesvol geladen is. Een ontbrekende of kapotte foto laat geen leeg vak achter.

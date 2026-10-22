@@ -4,22 +4,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#123B2A" />
-    <title>Onze diensten | Groen & Co.</title>
+    <title>Grasmaaien, snoeien en tuinhulp in Arnhem | Groen & Co.</title>
     <meta
       name="description"
-      content="Grasmaaien, heggen snoeien, tuinonderhoud, onkruid verwijderen en seizoensonderhoud. Max en Leo helpen je in Arnhem en omgeving."
+      content="Grasmaaien, heggen snoeien, onkruid verwijderen en kleine tuinklussen in Arnhem en omgeving. Bekijk de diensten van Max en Leo."
     />
-    <meta property="og:title" content="Onze diensten | Groen & Co." />
+    <meta property="og:title" content="Grasmaaien, snoeien en tuinhulp in Arnhem | Groen & Co." />
     <meta
       property="og:description"
-      content="Grasmaaien, heggen snoeien, tuinonderhoud, onkruid verwijderen en seizoensonderhoud. Max en Leo helpen je in Arnhem en omgeving."
+      content="Grasmaaien, heggen snoeien, onkruid verwijderen en kleine tuinklussen in Arnhem en omgeving. Bekijk de diensten van Max en Leo."
     />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="nl_NL" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="/styles.css" />
     <script src="/config.js" defer></script>
+    <script src="/whatsapp.js" defer></script>
     <script src="/app.js" defer></script>
+    <link rel="canonical" href="https://groenenco125235.vercel.app/diensten/" />
+    <meta property="og:url" content="https://groenenco125235.vercel.app/diensten/" />
   </head>
   <body>
     <a href="#main" class="skip">Naar de inhoud</a>
@@ -59,103 +62,121 @@
       <section class="page-hero">
         <div class="wrap">
           <div class="eyebrow">Onze diensten</div>
-          <h1>Aandacht voor<br />alles wat groeit.</h1>
+          <h1>Wat kunnen we<br />voor je doen?</h1>
           <p>
-            Een kleine onderhoudsbeurt of regelmatig hulp in de tuin: we kijken samen wat er nodig
-            is.
+            Grasmaaien, de heg snoeien of een paar kleine klusjes combineren? Hieronder zie je
+            waarmee we helpen in Arnhem en omgeving.
           </p>
         </div>
       </section>
       <section class="section section-white">
         <div class="wrap">
+          <h2 class="sr-only">Onze tuinklussen</h2>
           <div class="services">
-            <div class="service-row">
-              <span class="number">01</span>
+            <article class="service-row" id="grasmaaien">
+              <span class="number" aria-hidden="true">01</span>
               <h3>Grasmaaien</h3>
-              <p>Een verzorgd gazon, van een eenmalige maaibeurt tot regelmatig onderhoud.</p>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-            <div class="service-row">
-              <span class="number">02</span>
-              <h3>Heggen snoeien</h3>
-              <p>We snoeien je heg en zorgen voor een nette, verzorgde uitstraling.</p>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-            <div class="service-row">
-              <span class="number">03</span>
-              <h3>Tuinonderhoud</h3>
-              <p>Aandacht voor je tuin, afgestemd op wat er op dat moment nodig is.</p>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-            <div class="service-row">
-              <span class="number">04</span>
+              <p>Voor kleine en grotere gazons. We zorgen dat het gras weer netjes gemaaid is.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, ik wil graag mijn gras laten maaien. Kunnen jullie me hiermee helpen?"
+                aria-label="WhatsApp over grasmaaien"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20wil%20graag%20mijn%20gras%20laten%20maaien.%20Kunnen%20jullie%20me%20hiermee%20helpen%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="service-row" id="snoeien">
+              <span class="number" aria-hidden="true">02</span>
+              <h3>Heggen en struiken snoeien</h3>
+              <p>We helpen met het bijhouden van heggen en struiken.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, ik wil graag mijn heg of struiken laten snoeien. Kunnen jullie me hiermee helpen?"
+                aria-label="WhatsApp over heggen en struiken snoeien"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20wil%20graag%20mijn%20heg%20of%20struiken%20laten%20snoeien.%20Kunnen%20jullie%20me%20hiermee%20helpen%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="service-row" id="onkruid">
+              <span class="number" aria-hidden="true">03</span>
               <h3>Onkruid verwijderen</h3>
-              <p>We verwijderen onkruid uit je tuin en rondom je buitenruimte.</p>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
-            <div class="service-row">
-              <span class="number">05</span>
-              <h3>Seizoensonderhoud</h3>
-              <p>Je tuin verzorgen met aandacht voor het seizoen.</p>
-              <span class="arrow" aria-hidden="true">↗</span>
-            </div>
+              <p>Uit borders, tussen tegels en op andere plekken in de tuin.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, kunnen jullie helpen met onkruid verwijderen in mijn tuin?"
+                aria-label="WhatsApp over onkruid verwijderen"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20kunnen%20jullie%20helpen%20met%20onkruid%20verwijderen%20in%20mijn%20tuin%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="service-row" id="bladeren">
+              <span class="number" aria-hidden="true">04</span>
+              <h3>Bladeren opruimen</h3>
+              <p>We verzamelen en ruimen bladeren op zodat de tuin er weer netjes bij ligt.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, kunnen jullie helpen met bladeren opruimen in mijn tuin?"
+                aria-label="WhatsApp over bladeren opruimen"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20kunnen%20jullie%20helpen%20met%20bladeren%20opruimen%20in%20mijn%20tuin%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="service-row" id="tuinonderhoud">
+              <span class="number" aria-hidden="true">05</span>
+              <h3>Algemeen tuinonderhoud</h3>
+              <p>Verschillende kleine onderhoudsklusjes combineren tijdens één bezoek.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, ik zoek hulp bij een paar onderhoudsklusjes in de tuin. Kunnen jullie me helpen?"
+                aria-label="WhatsApp over algemeen tuinonderhoud"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20zoek%20hulp%20bij%20een%20paar%20onderhoudsklusjes%20in%20de%20tuin.%20Kunnen%20jullie%20me%20helpen%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="service-row" id="buitenklussen">
+              <span class="number" aria-hidden="true">06</span>
+              <h3>Kleine buitenklussen</h3>
+              <p>Andere eenvoudige werkzaamheden in de tuin of rondom het huis, in overleg.</p>
+              <a
+                class="button"
+                data-whatsapp
+                data-message="Hoi Max en Leo, ik heb een kleine buitenklus. Kunnen we bespreken of jullie kunnen helpen?"
+                aria-label="WhatsApp over kleine buitenklussen"
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20heb%20een%20kleine%20buitenklus.%20Kunnen%20we%20bespreken%20of%20jullie%20kunnen%20helpen%3F"
+                >App over deze klus<span aria-hidden="true">↗</span></a
+              >
+            </article>
           </div>
-          <div class="price-note">
-            <h3>Wat heeft jouw tuin nodig?</h3>
-            <div>
-              <p>
-                Stuur ons een bericht en vertel wat je wilt laten doen. Een foto van je tuin kan
-                helpen. We bespreken de werkzaamheden, planning en kosten persoonlijk met je.
-              </p>
-              <div class="actions">
-                <a class="text-link" href="/prijzen/"
-                  >Meer over de kosten <span aria-hidden="true">↗</span></a
-                >
-              </div>
-            </div>
-          </div>
+          <p class="service-note">
+            Staat jouw klus er niet bij? Stuur ons een berichtje. We zeggen eerlijk of we je kunnen
+            helpen.
+          </p>
         </div>
       </section>
-      <section class="section">
+      <section class="section" data-work-section hidden>
         <div class="wrap">
-          <div class="eyebrow">Onze aanpak</div>
-          <h2>Van bericht tot verzorgde tuin.</h2>
-          <div class="process">
-            <div class="process-item">
-              <span>01</span>
-              <h3>Persoonlijk contact</h3>
-              <p>
-                Je hebt rechtstreeks contact met Max of Leo. Geen callcenter of onnodige
-                tussenpersonen.
-              </p>
-            </div>
-            <div class="process-item">
-              <span>02</span>
-              <h3>Samen op locatie</h3>
-              <p>
-                We voeren onze opdrachten samen uit. Zo weet je wie er bij jou aan het werk zijn.
-              </p>
-            </div>
-            <div class="process-item">
-              <span>03</span>
-              <h3>Duidelijke afspraken</h3>
-              <p>
-                We bespreken vooraf welke werkzaamheden nodig zijn, wanneer we langskomen en wat de
-                kosten zijn.
-              </p>
-            </div>
-          </div>
-          <div class="work-gallery" data-work-gallery hidden></div>
+          <h2>Ons werk</h2>
+          <div class="work-gallery" data-work-gallery></div>
         </div>
       </section>
       <section class="band">
         <div class="wrap band-inner">
           <div>
-            <div class="eyebrow">Laten we kennismaken</div>
-            <h2>Goed groen begint<br />met een goed gesprek.</h2>
-            <p>Vertel ons over je tuin. We bespreken de mogelijkheden samen.</p>
+            <h2>Een klusje in de tuin?</h2>
+            <p>
+              Stuur ons een berichtje. Dan kijken we wat we voor je kunnen doen.<br />Alleen appen,
+              niet bellen.
+            </p>
           </div>
-          <a class="button" href="/contact/#whatsapp" data-whatsapp
+          <a
+            class="button"
+            data-whatsapp
+            href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20heb%20een%20vraag%20over%20tuinonderhoud."
             >Stuur ons een WhatsApp<span aria-hidden="true">↗</span></a
           >
         </div>
@@ -187,15 +208,17 @@
           <div>
             <div class="footer-title">Persoonlijk contact</div>
             <div class="footer-links">
-              <a href="/contact/#whatsapp" data-whatsapp>WhatsApp met Max & Leo ↗</a
+              <a
+                href="https://wa.me/31619110237?text=Hoi%20Max%20en%20Leo%2C%20ik%20heb%20een%20vraag%20over%20tuinonderhoud."
+                data-whatsapp
+                >WhatsApp met Max & Leo ↗</a
               ><span>Arnhem en omgeving</span><span>Alleen appen, niet bellen</span
               ><span>Afspraken in overleg</span>
             </div>
           </div>
         </div>
         <div class="footer-bottom">
-          <span>© 2026 Groen & Co.</span
-          ><span>Samen aan de slag. Met aandacht voor jouw groen.</span>
+          <span>© 2026 Groen & Co.</span><span>Tuinklussen in Arnhem en omgeving.</span>
         </div>
       </div>
     </footer>
