@@ -4,11 +4,12 @@ import { readFile } from "node:fs/promises";
 import vm from "node:vm";
 
 const source = await readFile(new URL("../public/whatsapp.js", import.meta.url), "utf8");
-function setup({ reduced = false, hover = true } = {}) {
+function setup({ reduced = false, hover = true, service = "" } = {}) {
   let now = 0,
     id = 0,
     mowerFrames = 0,
-    clippings = 0;
+    clippings = 0,
+    toolSrc = "";
   const frames = new Map(),
     timers = new Map(),
     events = {};
@@ -21,6 +22,8 @@ function setup({ reduced = false, hover = true } = {}) {
     moveTo() {},
     quadraticCurveTo() {},
     lineTo() {},
+    ellipse() {},
+    fill() {},
     stroke() {
       if (this.strokeStyle?.startsWith("rgba")) clippings++;
     },
@@ -31,6 +34,7 @@ function setup({ reduced = false, hover = true } = {}) {
   const link = {
     classList: { contains: (value) => classes.has(value), add: (value) => classes.add(value) },
     querySelector: () => null,
+    closest: () => (service ? { id: service } : null),
     dataset: {},
     clientWidth: 240,
     clientHeight: 52,
@@ -55,6 +59,9 @@ function setup({ reduced = false, hover = true } = {}) {
     Image: class {
       complete = true;
       naturalWidth = 70;
+      set src(value) {
+        toolSrc = value;
+      }
     },
     ResizeObserver: class {
       observe() {}
@@ -76,6 +83,9 @@ function setup({ reduced = false, hover = true } = {}) {
     link,
     frames,
     timers,
+    get toolSrc() {
+      return toolSrc;
+    },
     get mowerFrames() {
       return mowerFrames;
     },
@@ -102,7 +112,7 @@ function setup({ reduced = false, hover = true } = {}) {
   };
 }
 
-test("bovenaanzicht en snippers tijdens maaien; gras groeit pas na twee seconden terug", () => {
+test("bovenaanzicht en snippers tijdens maaien; sneller teruggroeien na één seconde", () => {
   const button = setup();
   assert.equal(button.link.dataset.grassState, "ready");
   button.fire("pointerenter", { pointerType: "mouse" });
@@ -113,11 +123,11 @@ test("bovenaanzicht en snippers tijdens maaien; gras groeit pas na twee seconden
   button.advance(800);
   assert.equal(button.link.dataset.grassState, "mown");
   button.fire("pointerleave");
-  button.advance(1999);
+  button.advance(999);
   assert.equal(button.link.dataset.grassState, "mown");
   button.advance(17);
   assert.equal(button.link.dataset.grassState, "growing");
-  button.advance(3300);
+  button.advance(2100);
   assert.equal(button.link.dataset.grassState, "ready");
   assert.equal(button.frames.size, 0, "geen doorlopende animatielus");
 });
@@ -127,7 +137,7 @@ test("teruggaan naar de knop annuleert groei en laat gedeeltelijk gegroeid gras 
   button.fire("pointerenter", { pointerType: "mouse" });
   button.advance(1500);
   button.fire("pointerleave");
-  button.advance(1000);
+  button.advance(500);
   button.fire("pointerenter", { pointerType: "mouse" });
   button.advance(5000);
   assert.equal(button.link.dataset.grassState, "mown");
@@ -162,3 +172,34 @@ test("touch en verminderde beweging laten de knop rustig", () => {
   assert.equal(reduced.frames.size, 0);
   assert.equal(reduced.mowerFrames, 0);
 });
+
+for (const [service, effect, tool] of [
+  ["grasmaaien", "grass", "mower-top"],
+  ["snoeien", "hedge", "shears-top"],
+  ["onkruid", "weeds", "weeder-top"],
+  ["bladeren", "leaves", "rake-top"],
+  ["tuinonderhoud", "care", "garden-tools-top"],
+  ["buitenklussen", "sweep", "broom-top"],
+]) {
+  test(service + ": eigen achtergrond, gereedschap, snippers en snel herstel", async () => {
+    const button = setup({ service });
+    assert.equal(button.link.dataset.gardenEffect, effect);
+    assert.equal(button.toolSrc, "/images/" + tool + ".svg");
+    assert.match(
+      await readFile(new URL("../public" + button.toolSrc, import.meta.url), "utf8"),
+      /<svg/,
+    );
+    button.fire("pointerenter", { pointerType: "mouse" });
+    button.advance(700);
+    assert.ok(button.mowerFrames > 0);
+    assert.ok(button.clippings > 0);
+    button.advance(800);
+    assert.equal(button.link.dataset.grassState, "mown");
+    button.fire("pointerleave");
+    button.advance(1100);
+    assert.equal(button.link.dataset.grassState, "growing");
+    button.advance(2100);
+    assert.equal(button.link.dataset.grassState, "ready");
+    assert.equal(button.frames.size, 0);
+  });
+}
