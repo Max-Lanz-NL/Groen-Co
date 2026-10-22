@@ -8,6 +8,8 @@
   --line: #dce1d7;
   --white: #fff;
   --serif: Georgia, "Times New Roman", serif;
+  --radius-small: 12px;
+  --radius: 24px;
 }
 * {
   box-sizing: border-box;
@@ -66,6 +68,7 @@ p + p {
   margin-inline: auto;
 }
 .skip {
+  border-radius: var(--radius-small);
   position: fixed;
   top: -100px;
   left: 20px;
@@ -141,11 +144,13 @@ p + p {
   box-shadow: 0 1px var(--green);
 }
 .nav .nav-contact {
+  border-radius: var(--radius-small);
   border: 1px solid var(--green);
   padding: 11px 19px;
   box-shadow: none;
 }
 .menu-toggle {
+  border-radius: var(--radius-small);
   display: none;
   border: 1px solid var(--line);
   background: transparent;
@@ -195,6 +200,7 @@ p + p {
   margin-top: 30px;
 }
 .button {
+  border-radius: var(--radius-small);
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -224,6 +230,7 @@ p + p {
   padding-bottom: 5px;
 }
 .garden {
+  border-radius: var(--radius);
   position: relative;
   background: #e5e9da;
   min-height: 510px;
@@ -267,6 +274,7 @@ p + p {
   padding: 100px 0;
 }
 .section-white {
+  border-radius: var(--radius);
   background: white;
 }
 .section-heading {
@@ -316,6 +324,7 @@ p + p {
   align-items: center;
 }
 .photo-placeholder {
+  border-radius: var(--radius);
   background: #e8ebdf;
   position: relative;
   min-height: 510px;
@@ -393,6 +402,7 @@ p + p {
   color: var(--natural);
 }
 .band {
+  border-radius: var(--radius);
   background: var(--forest);
   color: var(--cream);
   padding: 65px 0;
@@ -513,6 +523,7 @@ p + p {
   padding-bottom: 90px;
 }
 .contact-panel {
+  border-radius: var(--radius);
   background: #e8ebdf;
   padding: 45px;
 }
@@ -550,6 +561,7 @@ p + p {
   font-size: 16px;
 }
 .price-note {
+  border-radius: var(--radius);
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 60px;
@@ -584,6 +596,7 @@ details p {
   gap: 20px;
 }
 .work-gallery img {
+  border-radius: var(--radius);
   width: 100%;
   aspect-ratio: 4/3;
   object-fit: cover;
@@ -642,6 +655,7 @@ details p {
   }
   .nav {
     display: none;
+    border-radius: 0 0 var(--radius) var(--radius);
     position: absolute;
     top: 80px;
     left: 0;
